@@ -1,0 +1,20 @@
+---
+- name: Update the APT cache
+  apt: update_cache=yes
+
+- name: Install the python-software-properties utility
+  apt: pkg=python-software-properties
+
+- name: Add the Mumble PPA
+  apt_repository: repo='ppa:mumble/release'
+
+- name: Install Murmur
+  apt: pkg=mumble-server
+
+- name: Generate the Murmur config file
+  template: src=mumble-server.ini.j2
+            dest=/etc/mumble-server.ini
+            owner=root
+            group=mumble-server
+            mode=640
+  notify: Restart Murmur
